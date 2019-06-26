@@ -18,14 +18,14 @@ namespace mpvnet
 {
     public class App
     {
-        public static string ConfFilePath { get; } = mp.ConfFolder + "\\mpvnet.conf";
-        public static string RegPath { get; } = @"HKCU\Software\" + Application.ProductName;
+        public static string ConfFilePath => mp.ConfFolder + "\\mpvnet.conf";
+        public static string RegPath =>  @"HKCU\Software\" + Application.ProductName;
         public static string DarkMode { get; set; } = "always";
         public static string ProcessInstance { get; set; } = "single";
 
-        public static string[] VideoTypes    { get; } = "mkv mp4 mpg avi mov webm vob wmv flv avs 264 h264 asf webm mpeg mpv y4m avc hevc 265 h265 m2v m2ts vpy mts m4v".Split(' ');
-        public static string[] AudioTypes    { get; } = "mp3 mp2 ac3 ogg opus flac wav w64 m4a dts dtsma dtshr dtshd eac3 thd thd+ac3 mka aac mpa".Split(' ');
-        public static string[] SubtitleTypes { get; } = "srt ass idx sup ttxt ssa smi".Split(' ');
+        public static string[] VideoTypes =>  "mkv mp4 mpg avi mov webm vob wmv flv avs 264 h264 asf webm mpeg mpv y4m avc hevc 265 h265 m2v m2ts vpy mts m4v".Split(' ');
+        public static string[] AudioTypes =>  "mp3 mp2 ac3 ogg opus flac wav w64 m4a dts dtsma dtshr dtshd eac3 thd thd+ac3 mka aac mpa".Split(' ');
+        public static string[] SubtitleTypes => "srt ass idx sup ttxt ssa smi".Split(' ');
         public static string[] UrlWhitelist { get; set; } = { "tube", "vimeo", "ard", "zdf" };
 
         public static bool DebugMode { get; set; } = false;
@@ -289,13 +289,10 @@ namespace mpvnet
         }
 
         private string _Input = "";
-
-        public string Input {
+        public string Input 
+        {
             get => _Input;
-            set {
-                _Input = value;
-                NotifyPropertyChanged();
-            }
+            set => Set(ref _Input, value);
         }
 
         public static ObservableCollection<CommandItem> GetItems(string content)
