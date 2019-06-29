@@ -18,7 +18,7 @@ namespace mpvnet
 {
     public class App
     {
-        public static string ConfFilePath => mp.ConfFolder + "\\mpvnet.conf";
+        public static string ConfFilePath => Path.Combine(mp.ConfFolder, "mpvnet.conf");
         public static string RegPath =>  @"HKCU\Software\" + Application.ProductName;
         public static string DarkMode { get; set; } = "always";
         public static string ProcessInstance { get; set; } = "single";
@@ -30,9 +30,7 @@ namespace mpvnet
 
         public static bool DebugMode { get; set; } = false;
 
-        public static bool IsDarkMode { 
-            get => (DarkMode == "system" && Sys.IsDarkTheme) || DarkMode == "always";
-        }
+        public static bool IsDarkMode => DarkMode == "system" && Sys.IsDarkTheme || DarkMode == "always" ? true : false;        
 
         public static void Init()
         {
@@ -283,10 +281,7 @@ namespace mpvnet
 
         public CommandItem(SerializationInfo info, StreamingContext context) { }
 
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));       
 
         private string _Input = "";
         public string Input 
@@ -332,14 +327,10 @@ namespace mpvnet
         }
 
         private static ObservableCollection<CommandItem> _Items;
-
-        public static ObservableCollection<CommandItem> Items {
-            get {
-                if (_Items is null)
-                    _Items = GetItems(File.ReadAllText(mp.InputConfPath));
-                return _Items;
-            }
-        }
+        public static ObservableCollection<CommandItem> Items 
+        {
+            get =>  _Items? _Items = GetItems(File.ReadAllText(mp.InputConfPath) : _Items;                
+        }       
 
         public static void MigrateCommands(CommandItem item)
         {
@@ -383,17 +374,13 @@ namespace mpvnet
             }
         }
 
-        public static bool IsPosDifferent(Point screenPos)
-        {
-            return
-                Math.Abs(screenPos.X - Control.MousePosition.X) > 10 ||
-                Math.Abs(screenPos.Y - Control.MousePosition.Y) > 10;
-        }
+        public static bool IsPosDifferent(Point screenPos) =>  Math.Abs(screenPos.X - Control.MousePosition.X) > 10 ||
+                Math.Abs(screenPos.Y - Control.MousePosition.Y) > 10;       
     }
 
     public class SingleProcess
     {
-        public static int Message { get; } = RegisterWindowMessage("mpvnet_IPC");
+        public static int Message => RegisterWindowMessage("mpvnet_IPC");
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern int RegisterWindowMessage(string id);
